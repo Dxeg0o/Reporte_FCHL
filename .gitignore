@@ -1,0 +1,10 @@
+# Datos fuente crudos (no versionar: >100MB, excede el límite de GitHub).
+# El pipeline en scripts/preprocess.py lo lee localmente desde la raíz del repo.
+ventas_desde_2023.csv
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
