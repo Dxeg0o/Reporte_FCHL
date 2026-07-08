@@ -24,7 +24,8 @@ export function Recommendations({ recs }: { recs: Recommendation[] }) {
         {recs.map((r, i) => (
           <div
             key={i}
-            className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+            className="glass glass-hover animate-fade-in-up p-5"
+            style={{ animationDelay: `${i * 60}ms` }}
           >
             <span
               className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_STYLES[r.categoria]}`}

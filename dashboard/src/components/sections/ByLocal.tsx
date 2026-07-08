@@ -59,10 +59,10 @@ export function ByLocal({
           <button
             key={l.local}
             onClick={() => onSelectLocal(l.local)}
-            className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+            className={`rounded-full px-3.5 py-1.5 text-sm font-medium backdrop-blur transition ${
               selected === l.local
-                ? "bg-blue-600 text-white"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+                ? "bg-[var(--color-accent)] text-white shadow-sm"
+                : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
             }`}
           >
             {l.local}
@@ -71,44 +71,44 @@ export function ByLocal({
       </div>
 
       {localMeta?.tipo === "cdd" && (
-        <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800">
+        <div className="glass rounded-2xl border-l-4 border-l-amber-400/80 px-4 py-2 text-sm text-slate-700">
           CDD ENEA es un centro de distribución, no una sucursal de venta a
           público. Se muestra como canal separado para transparencia de los datos.
         </div>
       )}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Canal</p>
-          <p className="mt-1 text-sm font-semibold">
+        <div className="glass glass-hover p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Canal</p>
+          <p className="mt-1 text-base font-bold text-slate-900">
             {localMeta ? localTypeLabel(localMeta.tipo) : ""}
           </p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <p className="text-xs uppercase tracking-wide text-slate-500">
+        <div className="glass glass-hover p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
             Unidades vendidas
           </p>
-          <p className="mt-1 text-sm font-semibold">
+          <p className="mt-1 text-base font-bold tabular-nums text-slate-900">
             {formatUnits(totalRow?.unidades ?? 0)}
           </p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <p className="text-xs uppercase tracking-wide text-slate-500">
+        <div className="glass glass-hover p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
             Monto vendido
           </p>
-          <p className="mt-1 text-sm font-semibold">
+          <p className="mt-1 text-base font-bold tabular-nums text-slate-900">
             {formatCLP(totalRow?.monto ?? 0)}
           </p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <p className="text-xs uppercase tracking-wide text-slate-500">
+        <div className="glass glass-hover p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
             {vista === "macro" ? "Macro-temáticas activas" : "Temáticas activas"}
           </p>
-          <p className="mt-1 text-sm font-semibold">{rows.length}</p>
+          <p className="mt-1 text-base font-bold tabular-nums text-slate-900">{rows.length}</p>
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass-strong p-5">
         <div className="mb-2 flex items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-slate-800">
             Top temáticas - {selected}
@@ -127,7 +127,7 @@ export function ByLocal({
       />
 
       {localMeta?.tipo !== "cdd" && weak.length > 0 && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass p-5">
           <h3 className="text-sm font-semibold text-slate-800">
             Temáticas de baja rotación en {selected}
           </h3>
@@ -168,7 +168,7 @@ export function ByLocal({
       )}
 
       {topTitles.length > 0 && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass p-5">
           <h3 className="text-sm font-semibold text-slate-800">
             Top títulos en {selected}
           </h3>

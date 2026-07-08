@@ -68,16 +68,14 @@ export function Comparison({
         <h2 className="text-xl font-semibold text-slate-900">
           Comparación entre locales
         </h2>
-        <p className="mt-1 text-sm text-slate-600">
-          Participación (% de unidades del local) de las 10{" "}
-          {vista === "macro" ? "macro-temáticas" : "temáticas"} líderes de la
-          cadena, por local. El color se calcula por columna: más intenso = mayor
-          participación relativa <em>frente a los demás locales</em> en esa
-          temática (no una escala absoluta).
+        <p className="mt-1 text-sm text-slate-500">
+          Participación de cada local en las 10{" "}
+          {vista === "macro" ? "macro-temáticas" : "temáticas"} líderes. Color por
+          columna: más intenso = mayor peso relativo frente a los demás locales.
         </p>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="glass-strong overflow-x-auto p-4">
         <table className="w-full min-w-[900px] text-xs">
           <thead>
             <tr>
@@ -121,7 +119,7 @@ export function Comparison({
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass glass-hover p-5">
           <h3 className="text-sm font-semibold text-slate-800">
             Fortalezas por local (temática dominante)
           </h3>
@@ -142,7 +140,7 @@ export function Comparison({
           </ul>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass glass-hover p-5">
           <h3 className="text-sm font-semibold text-slate-800">
             Concentración vs. diversificación
           </h3>

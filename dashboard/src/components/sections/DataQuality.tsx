@@ -16,25 +16,25 @@ export function DataQuality({ metadata }: { metadata: Metadata }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="glass glass-hover p-4">
           <p className="text-xs uppercase text-slate-500">Registros crudos</p>
           <p className="mt-1 text-lg font-semibold">{formatUnits(metadata.rawRows)}</p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="glass glass-hover p-4">
           <p className="text-xs uppercase text-slate-500">Excluidos (no-libro)</p>
           <p className="mt-1 text-lg font-semibold">{formatUnits(metadata.excludedRows)}</p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="glass glass-hover p-4">
           <p className="text-xs uppercase text-slate-500">Registros de libros</p>
           <p className="mt-1 text-lg font-semibold">{formatUnits(metadata.bookRows)}</p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="glass glass-hover p-4">
           <p className="text-xs uppercase text-slate-500">Sin temática identificada</p>
           <p className="mt-1 text-lg font-semibold">{formatUnits(metadata.sinTematicaCount)}</p>
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass p-5">
         <h3 className="text-sm font-semibold text-slate-800">Criterios de exclusión aplicados</h3>
         <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-700">
           {metadata.exclusionCriteria.map((c, i) => (
@@ -43,7 +43,7 @@ export function DataQuality({ metadata }: { metadata: Metadata }) {
         </ul>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass p-5">
         <h3 className="text-sm font-semibold text-slate-800">
           Registros excluidos por categoría (top 15)
         </h3>
@@ -73,7 +73,7 @@ export function DataQuality({ metadata }: { metadata: Metadata }) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass p-5">
         <h3 className="text-sm font-semibold text-slate-800">
           Agrupación en macro-temáticas
         </h3>
@@ -97,7 +97,7 @@ export function DataQuality({ metadata }: { metadata: Metadata }) {
         </p>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass p-5">
         <h3 className="text-sm font-semibold text-slate-800">Otras verificaciones</h3>
         <ul className="mt-3 space-y-1.5 text-sm text-slate-700">
           <li>

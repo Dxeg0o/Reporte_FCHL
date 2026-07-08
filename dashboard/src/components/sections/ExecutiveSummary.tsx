@@ -1,4 +1,5 @@
 import { KpiCard } from "@/components/KpiCard";
+import { MarketContextNote } from "@/components/MarketContextNote";
 import { formatCLP, formatPct, formatUnits } from "@/lib/format";
 import type { Insights, Metadata } from "@/types";
 
@@ -38,53 +39,55 @@ export function ExecutiveSummary({
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-slate-900">Resumen ejecutivo</h2>
-        <p className="mt-1 text-sm text-slate-600">
-          Período analizado: {metadata.period.min} a {metadata.period.max}.{" "}
-          <span className="font-medium text-amber-700">{metadata.partialYearNote}</span>
+        <p className="mt-1 text-sm text-slate-500">
+          {metadata.period.min} a {metadata.period.max} · 2026 es año parcial
         </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        <KpiCard label="Unidades vendidas (libros)" value={formatUnits(metadata.bookUnitsTotal)} />
-        <KpiCard label="Monto vendido (neto)" value={formatCLP(metadata.bookAmountTotal)} />
+        <KpiCard
+          label="Unidades vendidas"
+          countTo={metadata.bookUnitsTotal}
+          format={formatUnits}
+        />
+        <KpiCard
+          label="Monto vendido (neto)"
+          countTo={metadata.bookAmountTotal}
+          format={formatCLP}
+        />
         <KpiCard
           label="Puntos de venta"
           value={String(nCanales)}
-          sublabel={`${nLocalesFisicos} sucursales + Tienda Web + CDD ENEA`}
+          sublabel={`${nLocalesFisicos} sucursales + Web + CDD`}
         />
         {decline != null && (
           <KpiCard
             label="Mercado 2023 → 2025"
             value={formatPct(decline)}
+            accent
             sublabel={
               u2023 && u2025
-                ? `${formatUnits(u2023)} → ${formatUnits(u2025)} u. (años completos)`
+                ? `${formatUnits(u2023)} → ${formatUnits(u2025)} u.`
                 : undefined
             }
           />
         )}
         {ytd.chain.varPct != null && (
           <KpiCard
-            label="YTD ene–jun 2026 vs 2025"
+            label="YTD 2026 vs 2025"
             value={formatPct(ytd.chain.varPct)}
+            accent
             sublabel={`${formatUnits(ytd.chain.u2026)} vs ${formatUnits(ytd.chain.u2025)} u.`}
           />
         )}
       </div>
 
       {decline != null && decline < 0 && (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          <span className="font-semibold">Contexto de mercado:</span> la cadena vendió{" "}
-          {formatPct(Math.abs(decline))} menos unidades en 2025 que en 2023. Por eso el
-          análisis de crecimiento/caída se lee mejor en{" "}
-          <span className="font-medium">participación (% del año)</span> que en unidades
-          absolutas: casi toda temática cae en volumen, pero algunas{" "}
-          <span className="font-medium">ganan peso relativo</span>.
-        </div>
+        <MarketContextNote declinePct={decline} />
       )}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass glass-hover p-5">
           <h3 className="text-sm font-semibold text-slate-800">
             Macro-temáticas dominantes de la cadena
           </h3>
@@ -107,7 +110,7 @@ export function ExecutiveSummary({
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass glass-hover p-5">
           <h3 className="text-sm font-semibold text-slate-800">Hallazgos clave</h3>
           <ul className="mt-3 space-y-3 text-sm text-slate-700">
             <li>
@@ -134,11 +137,6 @@ export function ExecutiveSummary({
                 (participación 2023 → 2025).
               </li>
             )}
-            <li>
-              <span className="font-medium">Calidad de datos:</span>{" "}
-              {formatUnits(metadata.excludedRows)} registros excluidos por no ser libros;
-              ver sección «Calidad de datos» para el detalle.
-            </li>
           </ul>
         </div>
       </div>

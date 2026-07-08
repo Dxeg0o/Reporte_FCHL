@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { colorForTema } from "@/lib/colors";
 import { formatMetric } from "@/lib/format";
+import { GlassTooltip } from "@/components/GlassTooltip";
 import type { Metric } from "@/types";
 
 const MESES = [
@@ -57,15 +58,19 @@ export function MonthlyLineChart({
           <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
           <XAxis
             dataKey="label"
-            tick={{ fontSize: 10 }}
+            tick={{ fontSize: 10, fill: "#64748b" }}
             angle={-45}
             textAnchor="end"
             height={50}
             interval="preserveStartEnd"
             minTickGap={12}
           />
-          <YAxis tickFormatter={(v) => formatMetric(v, metric)} tick={{ fontSize: 11 }} width={70} />
-          <Tooltip formatter={(v) => formatMetric(Number(v ?? 0), metric)} />
+          <YAxis
+            tickFormatter={(v) => formatMetric(v, metric)}
+            tick={{ fontSize: 11, fill: "#64748b" }}
+            width={70}
+          />
+          <Tooltip content={<GlassTooltip metric={metric} />} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           {showTotal && (
             <Line
@@ -75,6 +80,8 @@ export function MonthlyLineChart({
               strokeWidth={2}
               strokeDasharray="5 4"
               dot={false}
+              isAnimationActive
+              animationDuration={800}
             />
           )}
           {temas.map((tema) => (
@@ -83,8 +90,11 @@ export function MonthlyLineChart({
               type="monotone"
               dataKey={tema}
               stroke={colorForTema(tema)}
-              strokeWidth={2}
+              strokeWidth={2.5}
               dot={{ r: 2 }}
+              isAnimationActive
+              animationDuration={800}
+              animationEasing="ease-out"
             />
           ))}
         </LineChart>

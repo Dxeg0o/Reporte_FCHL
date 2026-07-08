@@ -73,17 +73,20 @@ export function Dashboard() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
-        <h1 className="text-lg font-semibold text-slate-900">
-          Distribución temática de ventas - Cadena de librerías FCHL
+      <header className="px-4 pt-8 pb-5 sm:px-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+          Cadena de librerías FCHL
+        </p>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          Distribución temática de ventas
         </h1>
-        <p className="text-sm text-slate-500">
-          Análisis por local y canal, {metadata.period.min} a {metadata.period.max}
+        <p className="mt-1 text-sm text-slate-500">
+          {metadata.period.min} – {metadata.period.max} · por local y canal
         </p>
       </header>
 
-      <div className="sticky top-0 z-10 border-b border-slate-200 bg-white">
-        <div className="flex items-center justify-between gap-2">
+      <div className="glass-nav sticky top-0 z-20">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-2">
           <Nav active={section} onSelect={(id) => setParam("seccion", id)} />
           {showVistaToggle && (
             <div className="hidden shrink-0 pr-4 sm:block">
@@ -92,13 +95,16 @@ export function Dashboard() {
           )}
         </div>
         {showVistaToggle && (
-          <div className="px-4 pb-2 sm:hidden">
+          <div className="mx-auto w-full max-w-6xl px-4 pb-2 sm:hidden">
             <VistaToggle vista={vista} onChange={(v) => setParam("vista", v)} />
           </div>
         )}
       </div>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
+      <main
+        key={section}
+        className="animate-fade-in-up mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6"
+      >
         {section === "resumen" && (
           <ExecutiveSummary metadata={metadata} insights={insights} />
         )}
@@ -150,8 +156,8 @@ export function Dashboard() {
         {section === "calidad" && <DataQuality metadata={metadata} />}
       </main>
 
-      <footer className="border-t border-slate-200 bg-white px-4 py-3 text-center text-xs text-slate-400 sm:px-6">
-        Dashboard generado a partir de ventas_desde_2023.csv · datos hasta{" "}
+      <footer className="mx-auto mt-4 mb-6 w-full max-w-6xl px-4 text-center text-xs text-slate-400 sm:px-6">
+        Reporte de ventas · Cadena de librerías FCHL · datos hasta{" "}
         {metadata.period.max}
       </footer>
     </div>

@@ -66,16 +66,10 @@ export function MonthlyEvolution({
         <h2 className="text-xl font-semibold text-slate-900">
           Evolución mensual
         </h2>
-        <p className="mt-1 text-sm text-slate-600">
-          {metric === "monto" ? "Monto vendido" : "Unidades vendidas"} mes a mes a lo
-          largo del tiempo ({metadata.period.min} a {metadata.period.max}). La línea
-          punteada es el total de la selección; las líneas de color son las
-          macro-temáticas elegidas.{" "}
-          <span className="font-medium text-amber-700">
-            {metadata.partialYearNote}
-          </span>{" "}
-          Siempre a nivel de macro-temática (el detalle de 565 categorías no está
-          disponible por mes).
+        <p className="mt-1 text-sm text-slate-500">
+          {metric === "monto" ? "Monto vendido" : "Unidades vendidas"} mes a mes
+          ({metadata.period.min} a {metadata.period.max}). La línea punteada es el
+          total; las de color, las macro-temáticas elegidas.
         </p>
       </div>
 
@@ -83,10 +77,10 @@ export function MonthlyEvolution({
         <span className="text-xs font-medium text-slate-500">Local:</span>
         <button
           onClick={() => setSelectedLocal(null)}
-          className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+          className={`rounded-full px-3.5 py-1.5 text-sm font-medium backdrop-blur transition ${
             selectedLocal === null
-              ? "bg-blue-600 text-white"
-              : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+              ? "bg-[var(--color-accent)] text-white shadow-sm"
+              : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
           }`}
         >
           Toda la cadena
@@ -95,10 +89,10 @@ export function MonthlyEvolution({
           <button
             key={l.local}
             onClick={() => setSelectedLocal(l.local)}
-            className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+            className={`rounded-full px-3.5 py-1.5 text-sm font-medium backdrop-blur transition ${
               selectedLocal === l.local
-                ? "bg-blue-600 text-white"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+                ? "bg-[var(--color-accent)] text-white shadow-sm"
+                : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
             }`}
           >
             {l.local}
@@ -106,7 +100,7 @@ export function MonthlyEvolution({
         ))}
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass-strong p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-slate-800">
             Serie temporal {selectedLocal ? `- ${selectedLocal}` : "- cadena"}
@@ -115,7 +109,7 @@ export function MonthlyEvolution({
             <MetricToggle metric={metric} onChange={setMetric} />
             <button
               onClick={handleExport}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/60 bg-white/60 px-3 py-1.5 text-xs font-medium text-slate-600 backdrop-blur transition hover:bg-white hover:text-[var(--color-accent)]"
             >
               Exportar CSV
             </button>
@@ -126,10 +120,10 @@ export function MonthlyEvolution({
             <button
               key={m}
               onClick={() => toggleMacro(m)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+              className={`rounded-full px-3 py-1 text-xs font-medium backdrop-blur transition ${
                 selectedMacros.includes(m)
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[var(--color-accent)] text-white shadow-sm"
+                  : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
               }`}
             >
               {m}

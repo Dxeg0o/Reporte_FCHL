@@ -2,6 +2,11 @@
 
 import type { Vista } from "@/types";
 
+const OPTIONS: { value: Vista; label: string }[] = [
+  { value: "macro", label: "Macro-temáticas" },
+  { value: "detalle", label: "Detalle (565)" },
+];
+
 export function VistaToggle({
   vista,
   onChange,
@@ -9,22 +14,32 @@ export function VistaToggle({
   vista: Vista;
   onChange: (v: Vista) => void;
 }) {
+  const activeIdx = OPTIONS.findIndex((o) => o.value === vista);
   return (
-    <div className="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
-      <span className="px-2 text-slate-400">Vista:</span>
-      {(["macro", "detalle"] as const).map((v) => (
-        <button
-          key={v}
-          onClick={() => onChange(v)}
-          className={`rounded-md px-2.5 py-1 font-medium transition ${
-            vista === v
-              ? "bg-white text-blue-600 shadow-sm"
-              : "text-slate-500 hover:text-slate-800"
-          }`}
-        >
-          {v === "macro" ? "Macro-temáticas" : "Detalle (565)"}
-        </button>
-      ))}
+    <div className="inline-flex items-center gap-2 text-xs">
+      <span className="text-slate-500">Vista</span>
+      <div className="relative inline-flex rounded-full border border-white/60 bg-white/50 p-0.5 backdrop-blur">
+        <span
+          className="absolute inset-y-0.5 rounded-full bg-white shadow-sm transition-transform duration-300"
+          style={{
+            width: `calc((100% - 0.25rem) / ${OPTIONS.length})`,
+            transform: `translateX(${activeIdx * 100}%)`,
+          }}
+        />
+        {OPTIONS.map((o) => (
+          <button
+            key={o.value}
+            onClick={() => onChange(o.value)}
+            className={`relative z-10 rounded-full px-3 py-1 font-medium transition-colors ${
+              vista === o.value
+                ? "text-[var(--color-accent)]"
+                : "text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

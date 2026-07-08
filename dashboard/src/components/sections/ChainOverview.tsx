@@ -22,15 +22,15 @@ export function ChainOverview({
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-slate-900">
-          Cuadro general consolidado de la cadena
+          Consolidado de la cadena
         </h2>
-        <p className="mt-1 text-sm text-slate-600">
-          Ranking de {vista === "macro" ? "macro-temáticas" : "temáticas de detalle"}{" "}
-          por unidades vendidas, 2023-2026, todos los locales y canales incluidos.
+        <p className="mt-1 text-sm text-slate-500">
+          Ranking de {vista === "macro" ? "macro-temáticas" : "temáticas"} de toda
+          la cadena
         </p>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass-strong p-5">
         <div className="mb-2 flex items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-slate-800">
             Top 12 {vista === "macro" ? "macro-temáticas" : "temáticas"} por{" "}
@@ -46,15 +46,15 @@ export function ChainOverview({
         topN={20}
         temaLabel={vista === "macro" ? "Macro-temática" : "Temática"}
         exportName={vista === "macro" ? "consolidado_macro" : "consolidado_detalle"}
-        exportContext="Consolidado de toda la cadena, 2023-2026 (incluye CDD ENEA)."
+        exportContext="Consolidado de toda la cadena (incluye CDD ENEA)."
       />
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass p-5">
         <h3 className="text-sm font-semibold text-slate-800">
           Top 10 títulos de la cadena
         </h3>
         <p className="mt-1 text-xs text-slate-500">
-          Los SKU más vendidos en unidades, todo el período, todos los canales.
+          Los más vendidos en unidades, todo el período.
         </p>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">

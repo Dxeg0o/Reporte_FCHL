@@ -3,8 +3,9 @@
 import { useMemo, useState } from "react";
 import { YearlyLineChart } from "@/components/YearlyLineChart";
 import { MetricToggle } from "@/components/MetricToggle";
+import { MarketContextNote } from "@/components/MarketContextNote";
 import { yearlySeries } from "@/lib/aggregate";
-import { formatPct, formatUnits } from "@/lib/format";
+import { formatPct } from "@/lib/format";
 import type { AggregatedRow, Insights, Metadata, Metric, Vista } from "@/types";
 
 export function YearlyEvolution({
@@ -57,37 +58,26 @@ export function YearlyEvolution({
         <h2 className="text-xl font-semibold text-slate-900">
           Evolución anual 2023-2026
         </h2>
-        <p className="mt-1 text-sm text-slate-600">
+        <p className="mt-1 text-sm text-slate-500">
           {metric === "monto" ? "Monto vendido" : "Unidades vendidas"} por año para
-          las{" "}
-          {vista === "macro" ? "macro-temáticas" : "temáticas de detalle"} líderes
-          de la cadena.{" "}
-          <span className="font-medium text-amber-700">{metadata.partialYearNote}</span>{" "}
-          Los puntos huecos marcan 2026 (año parcial).
+          las {vista === "macro" ? "macro-temáticas" : "temáticas"} líderes. Los
+          puntos huecos marcan 2026 (parcial).
         </p>
       </div>
 
       {decline != null && (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          <span className="font-semibold">Contexto de mercado:</span> la cadena
-          vendió {formatPct(Math.abs(decline))} menos unidades en 2025 que en
-          2023. Por eso las tablas de abajo ordenan por{" "}
-          <span className="font-medium">variación de participación</span> (puntos
-          de % del año), no solo por unidades absolutas: casi toda temática cae en
-          volumen, pero algunas ganan peso relativo dentro de una torta más
-          chica.
-          {ytd.varPct != null && (
-            <>
-              {" "}
-              El dato más reciente: {insights.ytd.meses} 2026 vs. 2025 muestra{" "}
-              <span className="font-medium">{formatPct(ytd.varPct)}</span> (
-              {formatUnits(ytd.u2026)} vs {formatUnits(ytd.u2025)} u.).
-            </>
-          )}
-        </div>
+        <MarketContextNote
+          declinePct={decline}
+          ytd={{
+            varPct: ytd.varPct,
+            u2025: ytd.u2025,
+            u2026: ytd.u2026,
+            meses: insights.ytd.meses,
+          }}
+        />
       )}
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass-strong p-5">
         <div className="mb-3 flex items-center justify-end">
           <MetricToggle metric={metric} onChange={setMetric} />
         </div>
@@ -96,10 +86,10 @@ export function YearlyEvolution({
             <button
               key={tema}
               onClick={() => toggle(tema)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+              className={`rounded-full px-3 py-1 text-xs font-medium backdrop-blur transition ${
                 selected.includes(tema)
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[var(--color-accent)] text-white shadow-sm"
+                  : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
               }`}
             >
               {tema}
@@ -116,7 +106,7 @@ export function YearlyEvolution({
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass glass-hover p-5">
           <h3 className="text-sm font-semibold text-slate-800">
             Ganan peso relativo (2023 → 2025, años completos)
           </h3>
@@ -136,7 +126,7 @@ export function YearlyEvolution({
             ))}
           </ul>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="glass glass-hover p-5">
           <h3 className="text-sm font-semibold text-slate-800">
             Pierden peso relativo (2023 → 2025, años completos)
           </h3>
@@ -158,11 +148,9 @@ export function YearlyEvolution({
         </div>
       </div>
 
-      <p className="text-xs text-slate-500">
-        Nota: &quot;pts&quot; = variación en puntos de participación (% del total
-        de unidades del año); &quot;u.&quot; = variación en unidades absolutas.
-        La comparación usa 2023 y 2025 por ser los últimos dos años completos
-        disponibles.
+      <p className="text-xs text-slate-400">
+        &quot;pts&quot; = variación en puntos de participación · &quot;u.&quot; =
+        variación en unidades. Se comparan 2023 y 2025 (últimos años completos).
       </p>
     </div>
   );

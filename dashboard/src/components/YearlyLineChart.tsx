@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { colorForTema } from "@/lib/colors";
 import { formatMetric } from "@/lib/format";
+import { GlassTooltip } from "@/components/GlassTooltip";
 import type { Metric } from "@/types";
 
 export function YearlyLineChart({
@@ -43,9 +44,13 @@ export function YearlyLineChart({
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 8, right: 24, bottom: 8, left: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="anio" tick={{ fontSize: 12 }} />
-          <YAxis tickFormatter={(v) => formatMetric(v, metric)} tick={{ fontSize: 11 }} width={70} />
-          <Tooltip formatter={(v) => formatMetric(Number(v ?? 0), metric)} />
+          <XAxis dataKey="anio" tick={{ fontSize: 12, fill: "#64748b" }} />
+          <YAxis
+            tickFormatter={(v) => formatMetric(v, metric)}
+            tick={{ fontSize: 11, fill: "#64748b" }}
+            width={70}
+          />
+          <Tooltip content={<GlassTooltip metric={metric} />} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           {temas.map((tema) => {
             const color = colorForTema(tema);
@@ -55,7 +60,10 @@ export function YearlyLineChart({
                 type="monotone"
                 dataKey={tema}
                 stroke={color}
-                strokeWidth={2}
+                strokeWidth={2.5}
+                isAnimationActive
+                animationDuration={800}
+                animationEasing="ease-out"
                 dot={(props) => {
                   const isPartial = data[props.index]?.anio === `${partialYear}*`;
                   return (

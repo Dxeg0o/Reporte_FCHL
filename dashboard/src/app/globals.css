@@ -3,4 +3,132 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Acento de marca: índigo/violeta más rico que el blue-600 plano */
+  --color-accent: oklch(0.55 0.2 275);
+  --color-accent-soft: oklch(0.62 0.17 280);
+
+  --radius-glass: 1.25rem;
+}
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 10px 40px -12px rgba(30, 27, 75, 0.22);
+  --glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.65);
+}
+
+/* Fondo "aurora": manchas de color difusas que le dan profundidad al vidrio.
+   Fijo al viewport para que el blur de los paneles siempre tenga algo detrás. */
+body {
+  background-color: #eef1f8;
+  background-image:
+    radial-gradient(60rem 60rem at 12% -8%, rgba(99, 102, 241, 0.28), transparent 60%),
+    radial-gradient(48rem 48rem at 92% 6%, rgba(168, 85, 247, 0.22), transparent 58%),
+    radial-gradient(52rem 52rem at 78% 96%, rgba(56, 189, 248, 0.2), transparent 60%),
+    radial-gradient(40rem 40rem at 24% 108%, rgba(129, 140, 248, 0.18), transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ---- Utilidades de vidrio ---- */
+
+@utility glass {
+  @apply backdrop-blur-xl backdrop-saturate-150;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-glass);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+}
+
+/* Más opaco: para tablas y gráficos donde manda la legibilidad */
+@utility glass-strong {
+  @apply backdrop-blur-2xl backdrop-saturate-150;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-glass);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+}
+
+/* Barra sticky (header/nav): blur fuerte, casi sin tinte */
+@utility glass-nav {
+  @apply backdrop-blur-xl backdrop-saturate-150;
+  background: rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Elevación al pasar el mouse sobre una tarjeta de vidrio */
+@utility glass-hover {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 50px -14px rgba(30, 27, 75, 0.3), var(--glass-highlight);
+  }
+}
+
+/* ---- Animaciones de entrada ---- */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@utility animate-fade-in-up {
+  opacity: 0;
+  animation: fade-in-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@utility animate-fade-in {
+  opacity: 0;
+  animation: fade-in 0.5s ease forwards;
+}
+
+@utility animate-scale-in {
+  opacity: 0;
+  animation: scale-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Respeta la preferencia de reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-scale-in {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

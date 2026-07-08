@@ -76,11 +76,11 @@ export function RankingTable({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={`Buscar ${temaLabel.toLowerCase()}…`}
-          className="w-full max-w-xs rounded-lg border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-blue-400"
+          className="w-full max-w-xs rounded-full border border-white/60 bg-white/60 px-4 py-1.5 text-sm outline-none backdrop-blur transition focus:border-[var(--color-accent)] focus:bg-white"
         />
         <button
           onClick={handleExport}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+          className="inline-flex items-center gap-1.5 rounded-full border border-white/60 bg-white/60 px-4 py-1.5 text-sm font-medium text-slate-600 backdrop-blur transition hover:bg-white hover:text-[var(--color-accent)]"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
@@ -92,10 +92,10 @@ export function RankingTable({
         <p className="text-xs text-slate-400">{exportContext}</p>
       )}
 
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="glass-strong overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+            <tr className="border-b border-slate-200/70 bg-white/40 text-left text-xs uppercase tracking-wide text-slate-500">
               <th className="px-4 py-3 font-medium">#</th>
               <th className="px-4 py-3 font-medium">{temaLabel}</th>
               <th className="px-4 py-3 text-right font-medium">Unidades</th>
@@ -115,7 +115,7 @@ export function RankingTable({
             {visible.map((r, i) => (
               <tr
                 key={r.tema}
-                className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
+                className="border-b border-slate-100/70 transition-colors last:border-0 hover:bg-[var(--color-accent)]/5"
               >
                 <td className="px-4 py-2.5 text-slate-500">{i + 1}</td>
                 <td className="px-4 py-2.5 font-medium text-slate-800">{r.tema}</td>
@@ -181,7 +181,7 @@ export function RankingTable({
       {!searching && filtered.length > topN && (
         <button
           onClick={() => setExpanded((e) => !e)}
-          className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-blue-600 hover:bg-slate-50"
+          className="w-full rounded-full border border-white/60 bg-white/50 px-4 py-2 text-xs font-medium text-[var(--color-accent)] backdrop-blur transition hover:bg-white"
         >
           {expanded ? "Mostrar menos" : `Ver todas las temáticas (${rows.length})`}
         </button>

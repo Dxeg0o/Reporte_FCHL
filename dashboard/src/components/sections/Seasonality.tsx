@@ -13,6 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import { MetricToggle } from "@/components/MetricToggle";
+import { GlassTooltip } from "@/components/GlassTooltip";
 import { monthlySeries } from "@/lib/aggregate";
 import { colorForTema } from "@/lib/colors";
 import { downloadCSV, toCSV } from "@/lib/csvExport";
@@ -106,17 +107,15 @@ export function Seasonality({
         <h2 className="text-xl font-semibold text-slate-900">
           Estacionalidad mensual
         </h2>
-        <p className="mt-1 text-sm text-slate-600">
-          {metric === "monto" ? "Monto vendido" : "Unidades vendidas"} por mes del
-          año, sumando 2023-2025 (años completos).
-          2026 se excluye de este cálculo porque aún no llega a noviembre-diciembre
-          y sesgaría esos meses a la baja. Siempre a nivel de macro-temática (el
-          detalle de 565 categorías no está disponible por mes).
+        <p className="mt-1 text-sm text-slate-500">
+          {metric === "monto" ? "Monto vendido" : "Unidades vendidas"} por mes,
+          sumando 2023-2025 (años completos). 2026 se excluye para no sesgar los
+          meses de fin de año.
         </p>
       </div>
 
-      <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-        <span className="font-semibold">Diciembre concentra {formatPct(pctDiciembre)}</span>{" "}
+      <div className="glass rounded-2xl border-l-4 border-l-amber-400/80 px-4 py-3 text-sm text-slate-700">
+        <span className="font-semibold text-amber-700">Diciembre concentra {formatPct(pctDiciembre)}</span>{" "}
         {metric === "monto" ? "del monto anual" : "de las unidades anuales"}
         {selectedLocal ? ` en ${selectedLocal}` : " de la cadena"}. Es la señal
         más fuerte de estacionalidad: conviene asegurar stock desde octubre para
@@ -127,10 +126,10 @@ export function Seasonality({
         <span className="text-xs font-medium text-slate-500">Local:</span>
         <button
           onClick={() => setSelectedLocal(null)}
-          className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+          className={`rounded-full px-3.5 py-1.5 text-sm font-medium backdrop-blur transition ${
             selectedLocal === null
-              ? "bg-blue-600 text-white"
-              : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+              ? "bg-[var(--color-accent)] text-white shadow-sm"
+              : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
           }`}
         >
           Toda la cadena
@@ -139,10 +138,10 @@ export function Seasonality({
           <button
             key={l.local}
             onClick={() => setSelectedLocal(l.local)}
-            className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+            className={`rounded-full px-3.5 py-1.5 text-sm font-medium backdrop-blur transition ${
               selectedLocal === l.local
-                ? "bg-blue-600 text-white"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+                ? "bg-[var(--color-accent)] text-white shadow-sm"
+                : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
             }`}
           >
             {l.local}
@@ -150,7 +149,7 @@ export function Seasonality({
         ))}
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass-strong p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-slate-800">
             {metric === "monto" ? "Monto" : "Unidades"} por mes{" "}
@@ -160,7 +159,7 @@ export function Seasonality({
             <MetricToggle metric={metric} onChange={setMetric} />
             <button
               onClick={handleExport}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/60 bg-white/60 px-3 py-1.5 text-xs font-medium text-slate-600 backdrop-blur transition hover:bg-white hover:text-[var(--color-accent)]"
             >
               Exportar CSV
             </button>
@@ -172,14 +171,14 @@ export function Seasonality({
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
               <YAxis tickFormatter={(v) => formatMetric(v, metric)} tick={{ fontSize: 11 }} width={70} />
-              <Tooltip formatter={(v) => formatMetric(Number(v ?? 0), metric)} />
+              <Tooltip content={<GlassTooltip metric={metric} />} cursor={{ fill: "rgba(99,102,241,0.06)" }} />
               <Bar dataKey="total" fill="#93c5fd" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="glass-strong p-5">
         <h3 className="mb-2 text-sm font-semibold text-slate-800">
           Curva mensual por macro-temática
         </h3>
@@ -188,10 +187,10 @@ export function Seasonality({
             <button
               key={m}
               onClick={() => toggleMacro(m)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+              className={`rounded-full px-3 py-1 text-xs font-medium backdrop-blur transition ${
                 selectedMacros.includes(m)
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[var(--color-accent)] text-white shadow-sm"
+                  : "border border-white/60 bg-white/50 text-slate-600 hover:bg-white"
               }`}
             >
               {m}
@@ -204,7 +203,7 @@ export function Seasonality({
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
               <YAxis tickFormatter={(v) => formatMetric(v, metric)} tick={{ fontSize: 11 }} width={70} />
-              <Tooltip formatter={(v) => formatMetric(Number(v ?? 0), metric)} />
+              <Tooltip content={<GlassTooltip metric={metric} />} cursor={{ fill: "rgba(99,102,241,0.06)" }} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               {selectedMacros.map((m) => (
                 <Line
