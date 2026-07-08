@@ -10,25 +10,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { colorForTema } from "@/lib/colors";
 import { formatPct, formatUnits } from "@/lib/format";
-
-const COLORS = [
-  "#2563eb",
-  "#0891b2",
-  "#0d9488",
-  "#65a30d",
-  "#ca8a04",
-  "#ea580c",
-  "#dc2626",
-  "#db2777",
-  "#9333ea",
-  "#4f46e5",
-];
 
 export function HorizontalBarChart({
   data,
 }: {
-  data: { categoria: string; unidades: number; pctUnidades: number }[];
+  data: { tema: string; unidades: number; pctUnidades: number }[];
 }) {
   const chartData = [...data].reverse();
   return (
@@ -43,8 +31,8 @@ export function HorizontalBarChart({
           <XAxis type="number" tickFormatter={(v) => formatUnits(v)} tick={{ fontSize: 11 }} />
           <YAxis
             type="category"
-            dataKey="categoria"
-            width={170}
+            dataKey="tema"
+            width={180}
             tick={{ fontSize: 11 }}
           />
           <Tooltip
@@ -54,8 +42,8 @@ export function HorizontalBarChart({
             ]}
           />
           <Bar dataKey="unidades" radius={[0, 4, 4, 0]}>
-            {chartData.map((_, i) => (
-              <Cell key={i} fill={COLORS[i % COLORS.length]} />
+            {chartData.map((d) => (
+              <Cell key={d.tema} fill={colorForTema(d.tema)} />
             ))}
           </Bar>
         </BarChart>

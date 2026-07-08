@@ -74,6 +74,30 @@ export function DataQuality({ metadata }: { metadata: Metadata }) {
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-slate-800">
+          Agrupación en macro-temáticas
+        </h3>
+        <p className="mt-2 text-sm text-slate-700">{metadata.macro.nota}</p>
+        <ul className="mt-3 grid grid-cols-2 gap-2 text-sm text-slate-700 sm:grid-cols-3">
+          <li>
+            <span className="font-medium">{metadata.macro.numFamilias}</span> macro-familias
+          </li>
+          <li>
+            <span className="font-medium">{metadata.macro.categoriasNoMapeadas}</span> categorías
+            sin regla clara → &quot;Otras temáticas&quot;
+          </li>
+          <li>
+            <span className="font-medium">{formatUnits(metadata.macro.unidadesNoMapeadas)}</span>{" "}
+            unidades en esas categorías
+          </li>
+        </ul>
+        <p className="mt-2 text-xs text-slate-500">
+          El detalle de las 565 categorías originales sigue disponible en todas
+          las secciones vía el toggle &quot;Detalle&quot;.
+        </p>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <h3 className="text-sm font-semibold text-slate-800">Otras verificaciones</h3>
         <ul className="mt-3 space-y-1.5 text-sm text-slate-700">
           <li>

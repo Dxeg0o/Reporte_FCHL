@@ -6,6 +6,7 @@ export const SECTIONS = [
   { id: "por-local", label: "Por local" },
   { id: "comparacion", label: "Comparación" },
   { id: "evolucion", label: "Evolución anual" },
+  { id: "estacionalidad", label: "Estacionalidad" },
   { id: "recomendaciones", label: "Recomendaciones" },
   { id: "calidad", label: "Calidad de datos" },
 ] as const;
@@ -20,7 +21,7 @@ export function Nav({
   onSelect: (id: SectionId) => void;
 }) {
   return (
-    <nav className="flex gap-1 overflow-x-auto border-b border-slate-200 bg-white px-4">
+    <nav className="flex gap-1 overflow-x-auto px-4">
       {SECTIONS.map((s) => (
         <button
           key={s.id}

@@ -10,34 +10,27 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { colorForTema } from "@/lib/colors";
 import { formatUnits } from "@/lib/format";
-import type { YearlyRow } from "@/types";
-
-const COLORS = [
-  "#2563eb",
-  "#dc2626",
-  "#0d9488",
-  "#ca8a04",
-  "#9333ea",
-  "#ea580c",
-  "#0891b2",
-  "#db2777",
-];
 
 export function YearlyLineChart({
-  rows,
+  series,
   years,
-  categorias,
+  temas,
+  partialYear,
 }: {
-  rows: YearlyRow[];
+  /** tema → año → unidades, ver lib/aggregate.ts#yearlySeries */
+  series: Record<string, Record<number, number>>;
   years: number[];
-  categorias: string[];
+  temas: string[];
+  partialYear?: number;
 }) {
   const data = years.map((y) => {
-    const point: Record<string, number | string> = { anio: String(y) };
-    for (const cat of categorias) {
-      const row = rows.find((r) => r.categoria === cat);
-      point[cat] = row ? Number(row[String(y)] ?? 0) : 0;
+    const point: Record<string, number | string> = {
+      anio: y === partialYear ? `${y}*` : String(y),
+    };
+    for (const tema of temas) {
+      point[tema] = series[tema]?.[y] ?? 0;
     }
     return point;
   });
@@ -51,16 +44,32 @@ export function YearlyLineChart({
           <YAxis tickFormatter={(v) => formatUnits(v)} tick={{ fontSize: 11 }} width={70} />
           <Tooltip formatter={(v) => formatUnits(Number(v ?? 0))} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
-          {categorias.map((cat, i) => (
-            <Line
-              key={cat}
-              type="monotone"
-              dataKey={cat}
-              stroke={COLORS[i % COLORS.length]}
-              strokeWidth={2}
-              dot={{ r: 3 }}
-            />
-          ))}
+          {temas.map((tema) => {
+            const color = colorForTema(tema);
+            return (
+              <Line
+                key={tema}
+                type="monotone"
+                dataKey={tema}
+                stroke={color}
+                strokeWidth={2}
+                dot={(props) => {
+                  const isPartial = data[props.index]?.anio === `${partialYear}*`;
+                  return (
+                    <circle
+                      key={props.key}
+                      cx={props.cx}
+                      cy={props.cy}
+                      r={3}
+                      fill={isPartial ? "#fff" : color}
+                      stroke={color}
+                      strokeWidth={isPartial ? 2 : 0}
+                    />
+                  );
+                }}
+              />
+            );
+          })}
         </LineChart>
       </ResponsiveContainer>
     </div>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T17:30:01.805297",
+  "generatedAt": "2026-07-08T16:43:25.345506",
   "sourceFile": "ventas_desde_2023.csv",
   "rawRows": 1349718,
   "excludedRows": 50431,
@@ -73,7 +73,7 @@
   "exclusionCriteria": [
     "Se excluyeron los SKU genéricos de bolsas de papel (9999999990002 / 9999999990003).",
     "Se excluyeron por completo las categorías no-libro: Agendas y Calendarios, Bolsa Papel Chica, Bolsa Papel Mediana, Calendarios, Gift Card, Juego de Naipes, Juegos Didácticos y Educativos, Juegos Varios, Juegos de Ingenio, Juegos de Mesa, Material Didactico, Puzzles.",
-    "De los registros excluidos, 17.584 tenían SKU con formato ISBN (prefijo 978/979) — corresponden principalmente a libros de acertijos/sudoku o packs educativos clasificados bajo categorías de 'juegos'. Se excluyeron igualmente por pertenecer a una categoría de producto no-libro, priorizando consistencia por categoría sobre el formato del código. Esto puede subestimar levemente las unidades de libros de esas categorías límite.",
+    "De los registros excluidos, 17.584 tenían SKU con formato ISBN (prefijo 978/979) - corresponden principalmente a libros de acertijos/sudoku o packs educativos clasificados bajo categorías de 'juegos'. Se excluyeron igualmente por pertenecer a una categoría de producto no-libro, priorizando consistencia por categoría sobre el formato del código. Esto puede subestimar levemente las unidades de libros de esas categorías límite.",
     "Los registros con SKU sin formato ISBN pero en categorías editoriales de libros (p.ej. 'Clásicos Universales', 'Ficción y Cuentos') se mantuvieron como libros, ya que la categoría es el criterio primario de clasificación.",
     "La categoría '(desconocido)' (70 registros) se renombró a 'Sin temática identificada'."
   ],
@@ -145,5 +145,34 @@
     }
   ],
   "negativeOrZeroFound": false,
-  "emptyCategoryFound": false
+  "emptyCategoryFound": false,
+  "chainYearTotals": [
+    {
+      "anio": 2023,
+      "unidades": 530592,
+      "monto": 7101665314
+    },
+    {
+      "anio": 2024,
+      "unidades": 462553,
+      "monto": 6173850933
+    },
+    {
+      "anio": 2025,
+      "unidades": 385455,
+      "monto": 5219726174
+    },
+    {
+      "anio": 2026,
+      "unidades": 170590,
+      "monto": 2390148181
+    }
+  ],
+  "chainDeclinePct": -27.4,
+  "macro": {
+    "numFamilias": 41,
+    "categoriasNoMapeadas": 1,
+    "unidadesNoMapeadas": 20,
+    "nota": "Las 565 categorías editoriales originales se agruparon en macro-temáticas usando la taxonomía oficial entregada por el equipo de adquisiciones (categorias_subcategorias_simple_v2.xlsx, 40 macro-categorías), invertida en scripts/macro_map.py. 17 categorías finas aparecían en el archivo bajo más de una macro-categoría; las de bajo volumen se resolvieron por orden de aparición y las de alto volumen (Narrativa Extranjera/Fantástica/Latinoamericana, Psicología Infantil, Teatro) se curaron a mano para evitar clasificaciones erróneas - ver AMBIGUOUS_OVERRIDES en macro_map.py. Las categorías sin match en el archivo oficial (1, 20 unidades) se agruparon en 'Otras temáticas'. Precio medio = monto neto / unidades."
+  }
 }

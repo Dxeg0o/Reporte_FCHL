@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ventas por Temática — Cadena FCHL",
+  title: "Ventas por Temática - Cadena FCHL",
   description: "Dashboard de distribución temática de ventas por local, 2023-2026",
 };
 
