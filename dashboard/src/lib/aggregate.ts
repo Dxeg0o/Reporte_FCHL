@@ -1,4 +1,4 @@
-import type { AggregatedRow, LocalMeta, MonthlyRow, Vista } from "@/types";
+import type { AggregatedRow, LocalMeta, Metric, MonthlyRow, Vista } from "@/types";
 
 export interface ThemeRow {
   tema: string;
@@ -66,14 +66,14 @@ export function localTotals(
     .sort((a, b) => b.unidades - a.unidades);
 }
 
-/** Pivotea aggregated.json a tema → año → unidades, para gráficos de evolución anual. */
+/** Pivotea aggregated.json a tema → año → métrica (unidades o monto), para evolución anual. */
 export function yearlySeries(
   rows: AggregatedRow[],
   vista: Vista,
   temas: string[],
-  opts: { local?: string } = {}
+  opts: { local?: string; metric?: Metric } = {}
 ): Record<string, Record<number, number>> {
-  const { local } = opts;
+  const { local, metric = "unidades" } = opts;
   const wanted = new Set(temas);
   const out: Record<string, Record<number, number>> = {};
   for (const tema of temas) out[tema] = {};
@@ -81,7 +81,7 @@ export function yearlySeries(
     if (local !== undefined && r.local !== local) continue;
     const key = dimKey(r, vista);
     if (!wanted.has(key)) continue;
-    out[key][r.anio] = (out[key][r.anio] ?? 0) + r.unidades;
+    out[key][r.anio] = (out[key][r.anio] ?? 0) + r[metric];
   }
   return out;
 }
@@ -90,9 +90,9 @@ export function yearlySeries(
 export function monthlySeries(
   rows: MonthlyRow[],
   temas: string[],
-  opts: { local?: string; years?: number[] } = {}
+  opts: { local?: string; years?: number[]; metric?: Metric } = {}
 ): { mes: number; total: number; porTema: Record<string, number> }[] {
-  const { local, years } = opts;
+  const { local, years, metric = "unidades" } = opts;
   const yearSet = years ? new Set(years) : null;
   const wanted = new Set(temas);
   const byMonth = new Map<number, { total: number; porTema: Record<string, number> }>();
@@ -104,14 +104,42 @@ export function monthlySeries(
     const mes = Number(mStr);
     if (yearSet && !yearSet.has(anio)) continue;
     const entry = byMonth.get(mes)!;
-    entry.total += r.unidades;
+    entry.total += r[metric];
     if (wanted.has(r.macro)) {
-      entry.porTema[r.macro] = (entry.porTema[r.macro] ?? 0) + r.unidades;
+      entry.porTema[r.macro] = (entry.porTema[r.macro] ?? 0) + r[metric];
     }
   }
   return [...byMonth.entries()]
     .sort((a, b) => a[0] - b[0])
     .map(([mes, v]) => ({ mes, total: v.total, porTema: v.porTema }));
+}
+
+/**
+ * Pivotea monthly.json a serie temporal continua (mes a mes real, ej. "2023-01" …
+ * "2026-07"), sumando la métrica indicada. Solo a nivel macro. Devuelve los meses
+ * presentes en los datos, ordenados cronológicamente.
+ */
+export function monthlyTimeSeries(
+  rows: MonthlyRow[],
+  temas: string[],
+  metric: Metric,
+  opts: { local?: string } = {}
+): { ym: string; total: number; porTema: Record<string, number> }[] {
+  const { local } = opts;
+  const wanted = new Set(temas);
+  const byYm = new Map<string, { total: number; porTema: Record<string, number> }>();
+  for (const r of rows) {
+    if (local !== undefined && r.local !== local) continue;
+    const entry = byYm.get(r.ym) ?? { total: 0, porTema: {} };
+    entry.total += r[metric];
+    if (wanted.has(r.macro)) {
+      entry.porTema[r.macro] = (entry.porTema[r.macro] ?? 0) + r[metric];
+    }
+    byYm.set(r.ym, entry);
+  }
+  return [...byYm.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([ym, v]) => ({ ym, total: v.total, porTema: v.porTema }));
 }
 
 export function localTypeLabel(tipo: LocalMeta["tipo"]): string {

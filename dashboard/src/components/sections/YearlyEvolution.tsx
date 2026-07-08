@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { YearlyLineChart } from "@/components/YearlyLineChart";
+import { MetricToggle } from "@/components/MetricToggle";
 import { yearlySeries } from "@/lib/aggregate";
 import { formatPct, formatUnits } from "@/lib/format";
-import type { AggregatedRow, Insights, Metadata, Vista } from "@/types";
+import type { AggregatedRow, Insights, Metadata, Metric, Vista } from "@/types";
 
 export function YearlyEvolution({
   aggregated,
@@ -22,10 +23,11 @@ export function YearlyEvolution({
       ? insights.topMacros
       : insights.chain.slice(0, 15).map((r) => r.tema);
   const [selected, setSelected] = useState<string[]>(allTemas.slice(0, 5));
+  const [metric, setMetric] = useState<Metric>("unidades");
 
   const series = useMemo(
-    () => yearlySeries(aggregated, vista, allTemas),
-    [aggregated, vista, allTemas]
+    () => yearlySeries(aggregated, vista, allTemas, { metric }),
+    [aggregated, vista, allTemas, metric]
   );
 
   const growth = vista === "macro" ? insights.growthMacro : insights.growthDetail;
@@ -56,7 +58,8 @@ export function YearlyEvolution({
           Evolución anual 2023-2026
         </h2>
         <p className="mt-1 text-sm text-slate-600">
-          Unidades vendidas por año para las{" "}
+          {metric === "monto" ? "Monto vendido" : "Unidades vendidas"} por año para
+          las{" "}
           {vista === "macro" ? "macro-temáticas" : "temáticas de detalle"} líderes
           de la cadena.{" "}
           <span className="font-medium text-amber-700">{metadata.partialYearNote}</span>{" "}
@@ -85,6 +88,9 @@ export function YearlyEvolution({
       )}
 
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="mb-3 flex items-center justify-end">
+          <MetricToggle metric={metric} onChange={setMetric} />
+        </div>
         <div className="mb-3 flex flex-wrap gap-2">
           {allTemas.map((tema) => (
             <button
@@ -105,6 +111,7 @@ export function YearlyEvolution({
           years={metadata.yearsPresent}
           temas={selected}
           partialYear={metadata.partialYear}
+          metric={metric}
         />
       </div>
 

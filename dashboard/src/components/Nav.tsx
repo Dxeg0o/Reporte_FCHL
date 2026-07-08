@@ -6,6 +6,7 @@ export const SECTIONS = [
   { id: "por-local", label: "Por local" },
   { id: "comparacion", label: "Comparación" },
   { id: "evolucion", label: "Evolución anual" },
+  { id: "evolucion-mensual", label: "Evolución mensual" },
   { id: "estacionalidad", label: "Estacionalidad" },
   { id: "recomendaciones", label: "Recomendaciones" },
   { id: "calidad", label: "Calidad de datos" },

@@ -9,6 +9,7 @@ import { ChainOverview } from "@/components/sections/ChainOverview";
 import { ByLocal } from "@/components/sections/ByLocal";
 import { Comparison } from "@/components/sections/Comparison";
 import { YearlyEvolution } from "@/components/sections/YearlyEvolution";
+import { MonthlyEvolution } from "@/components/sections/MonthlyEvolution";
 import { Seasonality } from "@/components/sections/Seasonality";
 import { Recommendations } from "@/components/sections/Recommendations";
 import { DataQuality } from "@/components/sections/DataQuality";
@@ -128,6 +129,13 @@ export function Dashboard() {
             insights={insights}
             metadata={metadata}
             vista={vista}
+          />
+        )}
+        {section === "evolucion-mensual" && (
+          <MonthlyEvolution
+            monthly={monthly}
+            metadata={metadata}
+            insights={insights}
           />
         )}
         {section === "estacionalidad" && (

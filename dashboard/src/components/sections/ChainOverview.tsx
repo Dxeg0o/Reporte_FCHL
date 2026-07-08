@@ -1,7 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import { HorizontalBarChart } from "@/components/HorizontalBarChart";
+import { MetricToggle } from "@/components/MetricToggle";
 import { RankingTable } from "@/components/RankingTable";
 import { formatCLP, formatUnits } from "@/lib/format";
-import type { Insights, Vista } from "@/types";
+import type { Insights, Metric, Vista } from "@/types";
 
 export function ChainOverview({
   insights,
@@ -10,6 +14,7 @@ export function ChainOverview({
   insights: Insights;
   vista: Vista;
 }) {
+  const [metric, setMetric] = useState<Metric>("unidades");
   const rows = vista === "macro" ? insights.macroChain : insights.chain;
   const top12 = rows.slice(0, 12);
 
@@ -26,11 +31,14 @@ export function ChainOverview({
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 className="mb-2 text-sm font-semibold text-slate-800">
-          Top 12 {vista === "macro" ? "macro-temáticas" : "temáticas"} por unidades
-          vendidas
-        </h3>
-        <HorizontalBarChart data={top12} />
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold text-slate-800">
+            Top 12 {vista === "macro" ? "macro-temáticas" : "temáticas"} por{" "}
+            {metric === "monto" ? "monto vendido" : "unidades vendidas"}
+          </h3>
+          <MetricToggle metric={metric} onChange={setMetric} />
+        </div>
+        <HorizontalBarChart data={top12} metric={metric} />
       </div>
 
       <RankingTable

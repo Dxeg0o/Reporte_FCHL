@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { HorizontalBarChart } from "@/components/HorizontalBarChart";
+import { MetricToggle } from "@/components/MetricToggle";
 import { RankingTable } from "@/components/RankingTable";
 import { localTotals, localTypeLabel, themesFor } from "@/lib/aggregate";
 import { formatCLP, formatPct, formatUnits } from "@/lib/format";
-import type { AggregatedRow, Insights, LocalMeta, Vista } from "@/types";
+import type { AggregatedRow, Insights, LocalMeta, Metric, Vista } from "@/types";
 
 export function ByLocal({
   aggregated,
@@ -22,6 +23,7 @@ export function ByLocal({
   selectedLocal: string | null;
   onSelectLocal: (local: string) => void;
 }) {
+  const [metric, setMetric] = useState<Metric>("unidades");
   const totals = useMemo(() => localTotals(aggregated), [aggregated]);
   const selected = selectedLocal ?? totals[0]?.local ?? locales[0]?.local;
 
@@ -107,10 +109,13 @@ export function ByLocal({
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 className="mb-2 text-sm font-semibold text-slate-800">
-          Top temáticas - {selected}
-        </h3>
-        <HorizontalBarChart data={rows.slice(0, 12)} />
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold text-slate-800">
+            Top temáticas - {selected}
+          </h3>
+          <MetricToggle metric={metric} onChange={setMetric} />
+        </div>
+        <HorizontalBarChart data={rows.slice(0, 12)} metric={metric} />
       </div>
 
       <RankingTable

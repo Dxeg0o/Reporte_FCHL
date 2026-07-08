@@ -12,11 +12,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { MetricToggle } from "@/components/MetricToggle";
 import { monthlySeries } from "@/lib/aggregate";
 import { colorForTema } from "@/lib/colors";
 import { downloadCSV, toCSV } from "@/lib/csvExport";
-import { formatPct, formatUnits } from "@/lib/format";
-import type { Insights, LocalMeta, Metadata, MonthlyRow } from "@/types";
+import { formatMetric, formatPct } from "@/lib/format";
+import type { Insights, LocalMeta, Metadata, Metric, MonthlyRow } from "@/types";
 
 const MESES = [
   "Ene", "Feb", "Mar", "Abr", "May", "Jun",
@@ -40,6 +41,7 @@ export function Seasonality({
 }) {
   const locales: LocalMeta[] = metadata.locales;
   const [selectedLocal, setSelectedLocal] = useState<string | null>(null);
+  const [metric, setMetric] = useState<Metric>("unidades");
   const topMacros = insights.topMacros.slice(0, 8);
   const [selectedMacros, setSelectedMacros] = useState<string[]>(
     topMacros.slice(0, 3)
@@ -50,8 +52,9 @@ export function Seasonality({
       monthlySeries(monthly, topMacros, {
         local: selectedLocal ?? undefined,
         years: FULL_YEARS,
+        metric,
       }),
-    [monthly, topMacros, selectedLocal]
+    [monthly, topMacros, selectedLocal, metric]
   );
 
   const totalAnual = data.reduce((s, m) => s + m.total, 0);
@@ -74,7 +77,8 @@ export function Seasonality({
   }
 
   function handleExport() {
-    const headers = ["Mes", "Unidades totales", ...topMacros];
+    const totalHeader = metric === "monto" ? "Monto total" : "Unidades totales";
+    const headers = ["Mes", totalHeader, ...topMacros];
     const rows = data.map((m) => [
       MESES[m.mes - 1],
       m.total,
@@ -103,7 +107,8 @@ export function Seasonality({
           Estacionalidad mensual
         </h2>
         <p className="mt-1 text-sm text-slate-600">
-          Unidades vendidas por mes del año, sumando 2023-2025 (años completos).
+          {metric === "monto" ? "Monto vendido" : "Unidades vendidas"} por mes del
+          año, sumando 2023-2025 (años completos).
           2026 se excluye de este cálculo porque aún no llega a noviembre-diciembre
           y sesgaría esos meses a la baja. Siempre a nivel de macro-temática (el
           detalle de 565 categorías no está disponible por mes).
@@ -112,7 +117,7 @@ export function Seasonality({
 
       <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
         <span className="font-semibold">Diciembre concentra {formatPct(pctDiciembre)}</span>{" "}
-        de las unidades anuales
+        {metric === "monto" ? "del monto anual" : "de las unidades anuales"}
         {selectedLocal ? ` en ${selectedLocal}` : " de la cadena"}. Es la señal
         más fuerte de estacionalidad: conviene asegurar stock desde octubre para
         no perder venta en la campaña de fin de año.
@@ -146,24 +151,28 @@ export function Seasonality({
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-slate-800">
-            Unidades por mes {selectedLocal ? `- ${selectedLocal}` : "- cadena"}
+            {metric === "monto" ? "Monto" : "Unidades"} por mes{" "}
+            {selectedLocal ? `- ${selectedLocal}` : "- cadena"}
           </h3>
-          <button
-            onClick={handleExport}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
-          >
-            Exportar CSV
-          </button>
+          <div className="flex items-center gap-2">
+            <MetricToggle metric={metric} onChange={setMetric} />
+            <button
+              onClick={handleExport}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+            >
+              Exportar CSV
+            </button>
+          </div>
         </div>
         <div style={{ width: "100%", height: 320 }}>
           <ResponsiveContainer>
             <BarChart data={chartData} margin={{ top: 8, right: 24, bottom: 8, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
-              <YAxis tickFormatter={(v) => formatUnits(v)} tick={{ fontSize: 11 }} width={70} />
-              <Tooltip formatter={(v) => formatUnits(Number(v ?? 0))} />
+              <YAxis tickFormatter={(v) => formatMetric(v, metric)} tick={{ fontSize: 11 }} width={70} />
+              <Tooltip formatter={(v) => formatMetric(Number(v ?? 0), metric)} />
               <Bar dataKey="total" fill="#93c5fd" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -194,8 +203,8 @@ export function Seasonality({
             <BarChart data={chartData} margin={{ top: 8, right: 24, bottom: 8, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
-              <YAxis tickFormatter={(v) => formatUnits(v)} tick={{ fontSize: 11 }} width={70} />
-              <Tooltip formatter={(v) => formatUnits(Number(v ?? 0))} />
+              <YAxis tickFormatter={(v) => formatMetric(v, metric)} tick={{ fontSize: 11 }} width={70} />
+              <Tooltip formatter={(v) => formatMetric(Number(v ?? 0), metric)} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               {selectedMacros.map((m) => (
                 <Line

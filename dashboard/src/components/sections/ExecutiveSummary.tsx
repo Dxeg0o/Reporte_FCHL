@@ -103,8 +103,7 @@ export function ExecutiveSummary({
           <p className="mt-3 text-xs text-slate-500">
             Estas 5 familias concentran{" "}
             {formatPct(top5.reduce((s, c) => s + c.pctUnidades, 0))} de las unidades
-            vendidas. Agrupar las 565 categorías originales revela familias (Infantil,
-            Juvenil, Fantasía) que en la vista detallada aparecían dispersas.
+            vendidas.
           </p>
         </div>
 

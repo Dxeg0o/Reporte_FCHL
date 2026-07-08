@@ -1,5 +1,6 @@
 export type LocalTipo = "fisica" | "web" | "cdd";
 export type Vista = "macro" | "detalle";
+export type Metric = "unidades" | "monto";
 
 export interface LocalMeta {
   local: string;
