@@ -86,10 +86,12 @@ export function Dashboard() {
       </header>
 
       <div className="glass-nav sticky top-0 z-20">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-2">
-          <Nav active={section} onSelect={(id) => setParam("seccion", id)} />
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <Nav active={section} onSelect={(id) => setParam("seccion", id)} />
+          </div>
           {showVistaToggle && (
-            <div className="hidden shrink-0 pr-4 sm:block">
+            <div className="hidden shrink-0 border-l border-white/40 py-2 pr-4 pl-3 sm:block">
               <VistaToggle vista={vista} onChange={(v) => setParam("vista", v)} />
             </div>
           )}
